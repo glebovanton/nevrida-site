@@ -18,6 +18,9 @@ jobs:
   build:
     name: Validate and build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,35 +33,38 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
 
-      - name: Install dependencies
+      - name: Install dependencies from lockfile
         run: npm ci --no-audit --no-fund
 
-      - name: Validate content
+      - name: Validate content and QR routes
         run: npm run check:content
 
-      - name: Build static site
+      - name: Build static Next.js site
         run: npm run build
 
-      - name: Check expected output
+      - name: Check critical HTML routes
+        shell: bash
         run: |
-          test -f out/index.html
-          test -f out/intro/index.html
-          test -f out/ru/intro/index.html
-          test -f out/en/intro/index.html
+          test -s out/index.html
+          for slug in intro zabiary-miane taverna-dlya-syabrou kalyhanka tsyabe-mala vouchaya-krou zhahi ty-geta-ya; do
+            test -s "out/${slug}/index.html"
+          done
+          test -s out/ru/intro/index.html
+          test -s out/en/intro/index.html
 
       - name: Configure GitHub Pages
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request'
         uses: actions/configure-pages@v5
 
-      - name: Upload static site
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
         with:
           path: out
 
   deploy:
     name: Deploy to GitHub Pages
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
     permissions:
