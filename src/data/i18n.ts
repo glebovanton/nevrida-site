@@ -1,0 +1,58 @@
+/** Language codes are ISO 639-1: Belarusian is "be"; "by" is a country code. */
+export const locales = ["be", "ru", "en"] as const;
+export type Locale = (typeof locales)[number];
+export const defaultLocale: Locale = "be";
+export const languageLabels: Record<Locale, string> = { be: "BE", ru: "RU", en: "EN" };
+
+export const messages = {
+  be: {
+    navigation: { tales: "казкі Неўрыды", about: "пра нас", rider: "райдар", contacts: "кантакты" },
+    music: { heading: "Слухаць песню", other: "астатняе", pending: "Спасылка хутка з’явіцца" },
+    lyrics: { show: "тэкст песні", hide: "схаваць тэкст" },
+    footer: { contacts: "Кантакты", socials: "Сацсеткі", copyright: "© Nevrida" },
+    accessibility: { home: "Nevrida — галоўная", menu: "Адкрыць меню", languages: "Выбраць мову", number: "Нумар", skip: "Да асноўнага зместу" },
+    reserved: { heading: "Старонка ў распрацоўцы", tales: "Праект казак Неўрыды", about: "Пра нас", body: "Матэрыялы для гэтай старонкі яшчэ рыхтуюцца." },
+    home: { eyebrow: "музычны праект", subtitle: "Песні, гісторыі і казкі Неўрыды", explore: "Адкрыць гісторыі", section: "Казкі Неўрыды", songs: "Песні і гісторыі", about: "Пра нас", aboutBody: "Новы дызайн галоўнай старонкі пакуль не перададзены.", rider: "Райдар", riderBody: "Актуальны райдар можна запытаць праз кантакты праекта.", temporary: "Часовая галоўная старонка" },
+    seo: { homeTitle: "Nevrida — афіцыйны сайт", homeDescription: "Nevrida — песні, гісторыі і казкі, тэксты і музычныя рэлізы.", songDescription: (title: string) => `${title} — тэкст песні на беларускай мове і спасылкі на рэлізы музычнага праекта Nevrida.` },
+  },
+  ru: {
+    navigation: { tales: "сказки Невриды", about: "о нас", rider: "райдер", contacts: "контакты" },
+    music: { heading: "Слушать песню", other: "остальное", pending: "Ссылка появится позже" },
+    lyrics: { show: "текст песни", hide: "скрыть текст" },
+    footer: { contacts: "Контакты", socials: "Соц. сети", copyright: "© Nevrida" },
+    accessibility: { home: "Nevrida — главная", menu: "Открыть меню", languages: "Выбрать язык", number: "Номер", skip: "К основному содержимому" },
+    reserved: { heading: "Страница в разработке", tales: "Проект сказок Невриды", about: "О нас", body: "Материалы для этой страницы ещё готовятся." },
+    home: { eyebrow: "музыкальный проект", subtitle: "Песни, истории и сказки Невриды", explore: "Открыть истории", section: "Сказки Невриды", songs: "Песни и истории", about: "О нас", aboutBody: "Новый дизайн главной страницы пока не предоставлен.", rider: "Райдер", riderBody: "Актуальный райдер можно запросить через контакты проекта.", temporary: "Временная главная страница" },
+    seo: { homeTitle: "Nevrida — официальный сайт", homeDescription: "Nevrida — песни, истории и сказки, тексты и музыкальные релизы.", songDescription: (title: string) => `${title} — оригинальный текст песни на белорусском языке и ссылки на музыкальные релизы Nevrida.` },
+  },
+  en: {
+    navigation: { tales: "Nevrida tales", about: "about", rider: "rider", contacts: "contacts" },
+    music: { heading: "Listen to the song", other: "more", pending: "Link coming soon" },
+    lyrics: { show: "song lyrics", hide: "hide lyrics" },
+    footer: { contacts: "Contacts", socials: "Social media", copyright: "© Nevrida" },
+    accessibility: { home: "Nevrida — home", menu: "Open menu", languages: "Choose language", number: "Track number", skip: "Skip to content" },
+    reserved: { heading: "Page under construction", tales: "Nevrida tales project", about: "About us", body: "Content for this page is being prepared." },
+    home: { eyebrow: "music project", subtitle: "Songs, stories and tales from Nevrida", explore: "Explore the stories", section: "Nevrida tales", songs: "Songs and stories", about: "About us", aboutBody: "The new home page design has not yet been provided.", rider: "Rider", riderBody: "Please contact the project for the current technical rider.", temporary: "Temporary home page" },
+    seo: { homeTitle: "Nevrida — official website", homeDescription: "Nevrida — original songs, tales, Belarusian lyrics and music releases.", songDescription: (title: string) => `${title} — original Belarusian-language lyrics and music release links from Nevrida.` },
+  },
+} as const;
+
+export function isLocale(input: string): input is Locale {
+  return (locales as readonly string[]).includes(input);
+}
+
+/** Unprefixed Belarusian paths preserve all existing printed QR codes. */
+export function pathFor(locale: Locale, slug?: string): string {
+  const path = slug ? `/${slug}/` : "/";
+  return locale === defaultLocale ? path : `/${locale}${path}`;
+}
+
+export function languageLinks(slug?: string): Record<Locale | "x-default", string> {
+  const origin = "https://nevrida.by";
+  return {
+    be: origin + pathFor("be", slug),
+    ru: origin + pathFor("ru", slug),
+    en: origin + pathFor("en", slug),
+    "x-default": origin + pathFor("be", slug),
+  };
+}
