@@ -1,30 +1,33 @@
 import type { ReactNode } from "react";
-import artwork from "@/data/artwork.generated.json";
 
-type Corner = "topLeft" | "topRight" | "bottomLeft" | "bottomRight";
-type Common = { corners?: Partial<Record<Corner, string>>; topArch?: string; bottomArch?: string };
-const common = (artwork as unknown as { _common?: Common })._common;
+/** The frame's artwork is traced from the actual Figma book decoration, not a screenshot. */
+const corners = ["top-left", "top-right", "bottom-left", "bottom-right"] as const;
 
-/** Reusable decorative shell. Real Figma SVGs are optional; fallback is pure CSS. */
 export function OrnateFrame({ children, className = "" }: { children: ReactNode; className?: string }) {
-  const corners: { className: string; key: Corner }[] = [
-    { key: "topLeft", className: "tl" }, { key: "topRight", className: "tr" },
-    { key: "bottomLeft", className: "bl" }, { key: "bottomRight", className: "br" },
-  ];
   return (
     <section className={`ornate-frame ${className}`}>
-      <div className="ornate-frame__outline" aria-hidden="true" />
-      {common?.topArch ? <img alt="" className="ornate-frame__arch ornate-frame__arch--top" src={common.topArch} /> : null}
-      {common?.bottomArch ? <img alt="" className="ornate-frame__arch ornate-frame__arch--bottom" src={common.bottomArch} /> : null}
-      {corners.map(({ key, className: position }) => {
-        const asset = common?.corners?.[key];
-        return (
-          <span key={key} className={`ornate-frame__corner ornate-frame__corner--${position}${asset ? " ornate-frame__corner--asset" : ""}`} aria-hidden="true">
-            {asset ? <img alt="" src={asset} /> : "❦"}
-          </span>
-        );
-      })}
-      {children}
+      <div className="ornate-frame__paper" aria-hidden="true">
+        <span className="ornate-frame__paper-rect" />
+        <span className="ornate-frame__paper-dome ornate-frame__paper-dome--top" />
+        <span className="ornate-frame__paper-dome ornate-frame__paper-dome--bottom" />
+      </div>
+      <div className="ornate-frame__decoration" aria-hidden="true">
+        <span className="ornate-frame__border ornate-frame__border--left" />
+        <span className="ornate-frame__border ornate-frame__border--right" />
+        <svg className="ornate-frame__arch ornate-frame__arch--top" viewBox="0 0 610 81" preserveAspectRatio="none">
+          <path d="M3 80 C33 -24 575 -24 607 80" fill="none" stroke="#bd9d52" strokeWidth="5" />
+          <path d="M12 80 C44 -5 566 -5 598 80" fill="none" stroke="#bd9d52" strokeWidth="1.25" />
+        </svg>
+        <svg className="ornate-frame__arch ornate-frame__arch--bottom" viewBox="0 0 610 81" preserveAspectRatio="none">
+          <path d="M3 1 C33 105 575 105 607 1" fill="none" stroke="#bd9d52" strokeWidth="5" />
+          <path d="M12 1 C44 86 566 86 598 1" fill="none" stroke="#bd9d52" strokeWidth="1.25" />
+        </svg>
+        {corners.map((name) => (
+          <img key={name} className={`ornate-frame__ornament ornate-frame__ornament--${name}`}
+            src={`/decor/ornament-${name}.svg`} width="203" height="213" alt="" />
+        ))}
+      </div>
+      <div className="ornate-frame__content">{children}</div>
     </section>
   );
 }

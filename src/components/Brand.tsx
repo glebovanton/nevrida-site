@@ -1,16 +1,16 @@
 import Link from "next/link";
-import artwork from "@/data/artwork.generated.json";
 import { messages, pathFor, type Locale } from "@/data/i18n";
 
-/** Replace the text fallback with the owner's original Figma logo asset when available. */
+/** Original Nevrida artwork vectorized from the owner's Figma PDF export. */
 export function Brand({ locale, large = false }: { locale: Locale; large?: boolean }) {
-  const common = (artwork as unknown as { _common?: { headerLogo?: string; footerLogo?: string } })._common;
-  const image = large ? common?.footerLogo : common?.headerLogo;
   return (
     <Link href={pathFor(locale)} className={large ? "brand brand--large" : "brand"} aria-label={messages[locale].accessibility.home}>
-      {image ? <img className="brand__asset" src={image} alt="Nevrida" /> : large ? (
-        <><span className="brand__ornament" aria-hidden="true">❦</span><span className="brand__word">NEVRIDA</span></>
-      ) : <span className="brand__monogram" aria-hidden="true">N<span>✦</span></span>}
+      <img
+        src={large ? "/brand/wordmark.svg" : "/brand/monogram.svg"}
+        alt="Nevrida"
+        width={large ? 270 : 63}
+        height={large ? 155 : 42}
+      />
     </Link>
   );
 }

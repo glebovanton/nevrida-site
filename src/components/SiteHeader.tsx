@@ -5,12 +5,13 @@ import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function SiteHeader({ locale, slug }: { locale: Locale; slug?: string }) {
   const t = messages[locale];
-  // The rider's final URL is not approved. Link to temporary homepage section until then.
+  // Keep the rider visible as in Figma, but do not misroute it to Contacts.
+  // Its URL is not approved yet; activate the link when the page is available.
   const menu = [
-    { label: t.navigation.tales, href: pathFor(locale, "nevrida1") },
-    { label: t.navigation.about, href: pathFor(locale, "nevrida2") },
-    { label: t.navigation.rider, href: pathFor(locale) + "#rider" },
-    { label: t.navigation.contacts, href: pathFor(locale) + "#contacts" },
+    { id: "tales", label: t.navigation.tales, href: pathFor(locale, "nevrida1") },
+    { id: "about", label: t.navigation.about, href: pathFor(locale, "nevrida2") },
+    { id: "rider", label: t.navigation.rider, href: null },
+    { id: "contacts", label: t.navigation.contacts, href: "#contacts" },
   ];
   return (
     <header className="site-header">
@@ -18,17 +19,19 @@ export function SiteHeader({ locale, slug }: { locale: Locale; slug?: string }) 
       <Brand locale={locale} />
       <div className="site-header__right">
         <nav className="desktop-nav" aria-label={t.accessibility.menu}>
-          {menu.map(({ href, label }, i) => (
-            <Link key={href} href={href} className={i === 0 ? "desktop-nav__primary" : undefined}>{label}</Link>
-          ))}
+          {menu.map(({ id, href, label }, i) => href ? (
+            <Link key={id} href={href} className={i === 0 ? "desktop-nav__primary" : undefined}>{label}</Link>
+          ) : <span key={id} className="desktop-nav__unavailable" title={t.reserved.heading}>{label}</span>)}
         </nav>
         <LanguageSwitcher locale={locale} slug={slug} className="lang-switcher--desktop" />
       </div>
       <details className="mobile-nav">
         <summary aria-label={t.accessibility.menu} className="mobile-nav__toggle"><span /><span /><span /></summary>
         <nav className="mobile-nav__panel" aria-label={t.accessibility.menu}>
-          {menu.map(({ href, label }, i) => (
-            <Link href={href} key={href}><span className="mobile-nav__number">0{i + 1}</span>{label}</Link>
+          {menu.map(({ id, href, label }, i) => href ? (
+            <Link href={href} key={id}><span className="mobile-nav__number">0{i + 1}</span>{label}</Link>
+          ) : (
+            <span key={id} className="mobile-nav__unavailable" title={t.reserved.heading}><span className="mobile-nav__number">0{i + 1}</span>{label}</span>
           ))}
           <LanguageSwitcher locale={locale} slug={slug} className="lang-switcher--mobile" />
           <div className="mobile-nav__copyright">© Nevrida</div>

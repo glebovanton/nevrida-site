@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "check:content": "node scripts/check-content.mjs",
-    "assets:figma": "node scripts/import-figma-assets.mjs"
+    "start": "node scripts/serve-static.mjs",
+    "check:content": "node scripts/check-content.mjs"
   },
   "dependencies": {
     "next": "^16.0.0",
@@ -20,5 +19,7 @@
     "@types/react-dom": "^19.2.0",
     "typescript": "^5.9.0"
   },
-  "engines": { "node": ">=20.9.0" }
+  "engines": {
+    "node": ">=20.9.0"
+  }
 }

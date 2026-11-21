@@ -11,7 +11,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
         <div className="site-footer__contacts">
           <p className="site-footer__heading">{t.contacts}</p>
           <a href={site.phoneHref}>{site.phoneLabel}</a>
-          <span title="Figma: email may contain a typo; confirm with owner">{site.emailLabel}</span>
+          <a href={`mailto:${site.emailLabel}`}>{site.emailLabel}</a>
         </div>
         <div className="site-footer__social">
           <p className="site-footer__heading">{t.socials}</p>

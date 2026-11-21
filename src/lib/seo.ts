@@ -18,7 +18,7 @@ export function rootMetadata(locale: Locale): Metadata {
 
 export function songMetadata(locale: Locale, song: Song): Metadata {
   const url = site.url + pathFor(locale, song.slug);
-  const description = messages[locale].seo.songDescription(song.title);
+  const description = locale === "be" ? song.metaDescription : messages[locale].seo.songDescription(song.title);
   return {
     title: song.title,
     description,
@@ -42,7 +42,7 @@ export function homeMetadata(locale: Locale): Metadata {
   return {
     title: messages[locale].seo.homeTitle,
     description: messages[locale].seo.homeDescription,
-    robots: { index: false, follow: true }, // Temporary homepage awaiting approved Figma design.
+    robots: { index: true, follow: true }, // Original homepage preserved from prior nevrida.by site.
     alternates: { canonical: site.url + pathFor(locale), languages: languageLinks() },
   };
 }

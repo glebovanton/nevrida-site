@@ -1,11 +1,14 @@
 {
-  "_common": {},
-  "intro": {},
-  "zabiary-miane": {},
-  "taverna-dlya-syabrou": {},
-  "kalyhanka": {},
-  "tsyabe-mala": {},
-  "vouchaya-krou": {},
-  "zhahi": {},
-  "ty-geta-ya": {}
+  "_common": {
+    "headerLogo": "/brand/monogram.svg",
+    "footerLogo": "/brand/wordmark.svg"
+  },
+  "intro": { "desktop": "/artwork/intro.webp" },
+  "zabiary-miane": { "desktop": "/artwork/zabiary-miane.webp" },
+  "taverna-dlya-syabrou": { "desktop": "/artwork/taverna-dlya-syabrou.webp" },
+  "kalyhanka": { "desktop": "/artwork/kalyhanka.webp" },
+  "tsyabe-mala": { "desktop": "/artwork/tsyabe-mala.webp" },
+  "vouchaya-krou": { "desktop": "/artwork/vouchaya-krou.webp" },
+  "zhahi": { "desktop": "/artwork/zhahi.webp" },
+  "ty-geta-ya": { "desktop": "/artwork/ty-geta-ya.webp" }
 }

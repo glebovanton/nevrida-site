@@ -1,76 +1,99 @@
-# Nevrida — Next.js / React / TypeScript, 3 языка
+# Nevrida — Next.js static site
 
-**Статический сайт для GitHub Pages** по Figma: [актуальная копия с языковым переключателем](https://www.figma.com/design/F8leIFIeOd92JrfLwtS647/).
+Перенос существующего сайта Nevrida на **Next.js 16 + React 19 + TypeScript**, **SSG** и **GitHub Pages**. Сайт остается статическим и **не требует Node-сервера на продакшене**.
 
-**Статус:** реализация общего шаблона **8 страниц песен/сказок**, централизованных данных и маршрутизации. `/`, `/nevrida1/`, `/nevrida2/` — временные страницы, **не утверждённые дизайны**. Фоны, оригинальные логотипы, SVG-орнаменты и лицензированный Columbina AltCap ещё надо экспортировать из Figma; без них компоновка является визуальной аппроксимацией, а НЕ pixel-perfect готовым релизом. См. `docs/FIGMA_ASSETS.md`.
+## Что в этом архиве
 
-## Требования и запуск
+- **Главная** (`/`, `/ru/`, `/en/`) — порт старого `nevrida/nevrida.github.io` с его **оригинальными** фотографией группы, фоном, альбомами, социальными сетями, контактами и YouTube-видео. В React вместо Vue; визуальная структура сохраняется.
+- **8 страниц сказок/песен** × 3 языка: `/intro/`, `/ru/intro/`, `/en/intro/` и аналогично все остальные. Белорусский (`be`) — язык URL по умолчанию; QR-ссылки не меняются.
+- **2 резервные страницы** `/nevrida1/` (проект сказок) и `/nevrida2/` («О нас») × 3 языка. Пока `noindex` и дизайн-заглушки. Райдер ещё не имеет утвержденного маршрута.
+- **Общая дизайн-система**: tokens/variables в `globals.css`, типографика, `SiteHeader`, `SiteFooter`, `Brand`, `OrnateFrame`, `MusicLinks`, `MusicIcon`, `Lyrics`, `LanguageSwitcher`. Нет Tailwind и глобального state management.
+- **Фигма-графика**: фоновые **8 разных иллюстраций** — WebP из PDF-экспорта Figma; **логотипы и четыре орнамента — SVG**, построенные из оригинального графического материала; **музыкальные иконки — inline SVG**; тексты и номера — HTML, а не картинка.
+- SEO: правильные `html lang`, canonical, `hreflang` (`be`, `ru`, `en`, `x-default`), sitemap главных и песенных страниц, OG metadata. Заглушки исключены из индекса.
 
-Node.js 22+ (Next 16 требует современную версию Node). Интернет нужен при установке зависимостей и подгрузке Google Fonts (Inter, Philosopher).
+## Установка
 
 ```bash
-npm install
+cd /Users/ag/Documents/nevrida-site
+nvm use             # .nvmrc: v26.13.1
+npm install         # создаст или обновит package-lock.json
 npm run check:content
 npm run dev
-# http://localhost:3000/intro/
-# http://localhost:3000/ru/intro/
-# http://localhost:3000/en/intro/
 ```
 
-Статическая сборка:
+Локальный адрес: `http://localhost:3000/intro/`.
+
+**Production preview (статический)**:
 
 ```bash
+npm run build       # next build → out/
+npm run start       # Node.js static file preview of out/, port 3000
+```
+
+`next start` намеренно НЕ используется: `output: "export"` не запускает Next.js-сервер. Дополнительной dev-зависимости `serve` не требуется.
+
+### Как безопасно наложить новый архив на существующий проект
+
+У тебя уже есть рабочая директория с `.git` и `package-lock.json`. Архив **не содержит `.git`, `.env`, `node_modules`, `out/` и `package-lock.json`**. Он сохраняет их при обычной распаковке поверх текущей папки, но сначала создай ветку и убедись, что рабочее дерево чистое.
+
+```bash
+cd /Users/ag/Documents/nevrida-site
+git status --short
+git switch -c feat/figma-fidelity
+
+# Распаковать содержимое архива в /Users/ag/Documents/
+# (внутри архива есть папка nevrida-site/)
+cd /Users/ag/Documents
+unzip -o ~/Downloads/nevrida-site-figma.zip
+
+cd nevrida-site
+nvm use
+npm install
+npm run check:content
 npm run build
-# готовые страницы находятся в out/
+npm run start
 ```
 
-## Что где изменять
+Если работаешь в совершенно новой папке, `npm install` также создаст lock-файл. **Коммить `package-lock.json`** — в CI будет `npm ci` и воспроизводимая установка. Пока lock-файла нет, workflow умеет выполнить `npm install` для первоначальной сборки.
 
-- `src/data/songs.ts` — **единственный источник slug, заголовков, номеров и будущих ссылок на платформы**.
-- `src/data/lyrics.ts` — тексты песен из Figma; намеренно не переводятся автоматически.
-- `src/data/i18n.ts` — переводы элементов интерфейса BE/RU/EN, функции URL, hreflang.
-- `src/components` — общий Header, LanguageSwitcher, Footer, MusicLinks, Lyrics, Ornament и SongPage.
-- `src/app/(be)`, `(ru)/ru`, `(en)/en` — минимальные адаптеры маршрутов и **отдельные корневые layout для правильного `<html lang>`**. Тела страниц не дублируются.
-- `src/app/sitemap.ts`, `robots.ts`, `src/lib/seo.ts` — поисковая оптимизация.
-- `src/app/globals.css` — единые дизайн-токены, сетка, адаптивные размеры.
-- `src/data/artwork.generated.json` — ссылки на импортированные изображения из `public/artwork/`.
-- `docs/ROUTES_AND_SCOPE.md` — полная матрица URL и недостающих материалов.
+## Где редактировать контент
 
-Базовый белорусский URL остаётся `/intro/` (без `/be/`), чтобы не менять QR. Русский: `/ru/intro/`; английский: `/en/intro/`. Figma-сервис и авторизация **не нужны посетителям**.
+| Что менять | Файл |
+|---|---|
+| Песни, slug, порядок, ссылки на сервисы | `src/data/songs.ts` |
+| Полные тексты песен из Figma | `src/data/lyrics.ts` |
+| Переводы интерфейса, маршруты языков | `src/data/i18n.ts` |
+| Телефон, e-mail, соцсети | `src/data/site.ts` |
+| Привязка иллюстрации к песне | `src/data/artwork.generated.json` |
+| Глобальные дизайн-токены и responsive | `src/app/globals.css` |
+| Контент старой главной | `src/components/HomePage.tsx` |
 
-## Как добавлять ссылки на платформы
+Для добавления релиза заполняешь `releaseLinks` у песни. Пустые сервисы автоматически остаются без ссылок. Lyrics разворачиваются через native `<details>`, без JS. Языковой переключатель и мобильное меню — тоже `<details>`.
 
-Открой `src/data/songs.ts`, найди песню и внеси только известные, подтверждённые URL:
+## Figma, типографика и точность
 
-```ts
-releaseLinks: {
-  spotify: "https://open.spotify.com/track/EXAMPLE",
-  youtube: "https://www.youtube.com/watch?v=EXAMPLE",
-},
-```
+Источник: [новая копия Figma](https://www.figma.com/design/f8npyRccANqXSzSipoinOy/?node-id=0-1) и **18 PDF из присланного экспорта**. Для реального изображения использован источник PDF, а не снимок готовой страницы с текстом поверх. Mobile-экраны проверены по Figma.
 
-Сейчас все `releaseLinks: {}` пустые. Элементы платформ отображаются неактивными, без фиктивных ссылок. После изменения выполни `npm run build` и опубликуй новую статическую сборку.
+Визуальные ориентиры desktop — **1440 px**, mobile — **360 px**. Отступы, шапка, золотая рамка и положение блоков перенесены в responsive CSS с `rem`, `clamp()`, media queries. Мы не меняем корневой `font-size` в зависимости от экрана: пользователи могут масштабировать текст.
 
-## Деплой в GitHub Pages
+Ограничение: в архиве **нет оригинального веб-шрифта `Columbina AltCap`** (файл и лицензия не предоставлены). Заголовки используют стек `Columbina AltCap → Cormorant Garamond → Georgia`, но без исходного файла не будут математически pixel-perfect. Весь базовый текст — `Inter`, навигация — `Philosopher` (Google Fonts с `font-display: swap`); для полностью локальной загрузки разрешенные WOFF2 можно подключить через `next/font/local` после получения файлов с подходящей лицензией. Файлы шрифтов в ZIP **не входят**.
 
-Существующий домен уже указывает на GitHub Pages, **DNS и S3 не трогать**. Репозиторий `nevrida/nevrida.github.io` сейчас является опубликованным статическим сайтом. НЕ перезаписывай его до проверки ассетов, локализации, сопоставления по Figma и новой главной.
+**Проверка:** исходные artwork-файлы, SVG, CSS, локализации, QR-пути и синтаксис TS/TSX проверены программно. Полный `next build` в текущем окружении был недоступен из-за отсутствия npm-зависимостей/доступа к реестру; его нужно выполнить локально до публикации. Финальное совпадение Chrome/Safari на desktop/mobile после установки оригинального шрифта требует локального visual QA.
 
-При готовности:
+## CI/CD / GitHub Pages
 
-1. Подготовить исходники Next.js в отдельной ветке/PR. Обязательно сделать бэкап работающего GitHub Pages до переключения.
-2. В `Settings → Pages` выбрать **GitHub Actions** как источник деплоя.
-3. Пушить согласованный исходный код на `main`: `.github/workflows/pages.yml` выполняет `npm install`, проверку контента, `next build`, выкладывает `out/` в Pages.
-4. Проверить все 10 QR-URL со слэшем и все `ru/en` версии на опубликованном домене; проверить сохранение `CNAME` и `public/.nojekyll`.
+`.github/workflows/pages.yml`:
 
-Готовые статические страницы находятся в `out/`. Не править `out/` вручную, как и старый `dist/`. Публикуется именно результат сборки.
+- Pull request в `main` → `check:content` + `build`, **без деплоя**;
+- push/merge в `main` → билд `out/` и публикация через `actions/deploy-pages`;
+- Node-версия только из `.nvmrc`, секреты/SSH/PAT/сервер не нужны;
+- минимальные permissions, `pages:write` и `id-token:write` — только в deploy job.
 
-## Незавершённые страницы
+**Не переключай production `nevrida.by`, пока не проверил все страницы.** Домен управляется через Hoster.by (DNS направлен на GitHub Pages); Custom domain необходимо назначить в GitHub Settings → Pages. Файл `public/CNAME` сам по себе не переносит домен при Actions deployment. Старые QR-адреса сохраняются.
 
-- `/`: финальный макет главной ещё не передан, оставлена демонстрационная страница, `noindex`.
-- `/nevrida1/`: проект сказок, контент/макеты у Альбины, пока `noindex`.
-- `/nevrida2/`: «О нас», контент/макет отсутствуют, пока `noindex`.
-- Райдер: URL ещё не согласован; временная ссылка в меню ведёт на `/#rider`, отдельной публичной страницы нет.
+## Что остаётся согласовать
 
-## Особенности вёрстки
-
-`html` сохраняет стандартные 16px для `1rem` (учитывает настройки браузера); `clamp()` обеспечивает плавные размеры; Flex/Grid — адаптивную структуру вместо масштабирования фрейма целиком. Навигация и раскрытие текста песни работают без JavaScript. Контактный адрес `nevridaland@gmal.com` перенесён из Figma дословно, требует подтверждения владельцем. Экспорт графики — `docs/FIGMA_ASSETS.md`.
+1. Оригинальный лицензированный `Columbina AltCap`, чтобы совпали заголовки.
+2. Уточнить e-mail из Figma/старого сайта: `nevridaland@gmal.com` сохранён буквально; **не исправляли без подтверждения**.
+3. Финальные материалы для `/nevrida1/`, `/nevrida2/` и райдера.
+4. Окончательные ссылки песен и языковые описания для SEO.
