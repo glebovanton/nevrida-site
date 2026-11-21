@@ -7,3 +7,5 @@ out/
 *.tsbuildinfo
 .idea/
 .vscode/
+
+next-env.d.ts
