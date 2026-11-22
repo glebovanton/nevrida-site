@@ -99,12 +99,12 @@ export const songs: readonly Song[] = [
   },
 ];
 
-export const reservedSlugs = ["nevrida1", "nevrida2"] as const;
+export const contentSlugs = ["nevrida1", "nevrida2"] as const;
 
 export function findSong(slug: string): Song | undefined {
   return songs.find((song) => song.slug === slug);
 }
 
-export function isReservedSlug(slug: string): boolean {
-  return reservedSlugs.some((reserved) => reserved === slug);
+export function isContentSlug(slug: string): slug is (typeof contentSlugs)[number] {
+  return contentSlugs.some((contentSlug) => contentSlug === slug);
 }

@@ -1,6 +1,6 @@
 import type { Platform } from "@/data/songs";
 
-export function MusicIcon({ platform }: { platform: Platform }) {
+export function MusicIcon({ platform }: { platform: Platform | "mtsMusic" }) {
   const common = { viewBox: "0 0 64 64", fill: "none", xmlns: "http://www.w3.org/2000/svg", "aria-hidden": true as const };
   switch (platform) {
     case "yandexMusic":
@@ -13,6 +13,8 @@ export function MusicIcon({ platform }: { platform: Platform }) {
       return <svg {...common} fill="currentColor"><rect x="5" y="28" width="7" height="13" rx="3"/><rect x="16" y="23" width="7" height="23" rx="3"/><rect x="27" y="15" width="7" height="39" rx="3"/><rect x="38" y="24" width="7" height="21" rx="3"/><rect x="49" y="18" width="7" height="33" rx="3"/></svg>;
     case "itunes":
       return <svg {...common} fill="currentColor"><path d="M43 17c-5 0-7 3-11 3s-7-3-12-2C7 20 6 41 14 50c5 6 10 6 16 2 5-3 7-2 12 0 8 4 15-9 16-17-7-1-11-13-15-18ZM35 14c1-9 8-13 15-13-1 9-7 13-15 13Z" /></svg>;
+    case "mtsMusic":
+      return <svg {...common} fill="currentColor"><path d="M9 13h13l10 23 10-23h13v38H44V28L34 51h-4L20 28v23H9V13Z"/></svg>;
     case "youtube":
       return <svg {...common} fill="currentColor"><path d="m23 13 29 19-29 19V13Z" /></svg>;
   }

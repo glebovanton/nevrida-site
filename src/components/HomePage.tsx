@@ -1,61 +1,83 @@
 import Link from "next/link";
-import { messages, pathFor, type Locale } from "@/data/i18n";
+import { pathFor, type Locale } from "@/data/i18n";
+import { pages } from "@/data/pages";
+import { SiteHeader } from "./SiteHeader";
+import { SiteFooter } from "./SiteFooter";
+import { StreamingLinks } from "./StreamingLinks";
 
-/** Faithful semantic React port of old nevrida.github.io/src/components/Main.vue and Footer.vue. */
-const oldAlbums = [
-  { id: "kabluchki", url: "https://ps.onerpm.com/2740100774" },
-  { id: "ogni", url: "https://ps.onerpm.com/3227207815" },
-  { id: "omut", url: "https://onerpm.link/1488382707" },
-  { id: "nikto", url: "https://onerpm.link/800192216601" },
-  { id: "omut-radio", url: "https://onerpm.link/3513763204" },
-] as const;
-
-const oldSocials = [
-  { id: "vk", url: "https://vk.com/nevrida", label: "ВКонтакте" },
-  { id: "inst", url: "https://www.instagram.com/nevridaland/", label: "Instagram" },
-  { id: "fb", url: "https://www.facebook.com/nevrida", label: "Facebook" },
-  { id: "youtube", url: "https://www.youtube.com/nevridaland", label: "YouTube" },
+// Existing artwork only: keep the Figma-style composition separate from song pages.
+// Nothing here depends on a fixed number of songs or editorial pages.
+const heroArt = [
+  "/legacy/home/albums/nikto.webp",
+  "/legacy/home/albums/ogni.webp",
+  "/legacy/home/albums/kabluchki.webp",
+  "/legacy/home/albums/omut.webp",
 ] as const;
 
 export function HomePage({ locale }: { locale: Locale }) {
-  const t = messages[locale];
+  const { band, tales } = pages[locale];
+  const genre = {
+    be: "Беларускі фольк-рок гурт",
+    ru: "Белорусская фолк-рок-группа",
+    en: "Belarusian folk-rock band",
+  }[locale];
+  const bandHeading = {
+    be: "Беларускі гурт",
+    ru: "Белорусская группа",
+    en: "Belarusian band",
+  }[locale];
+  const aboutLabel = {
+    be: "Даведацца пра гурт",
+    ru: "Узнать о группе",
+    en: "Discover the band",
+  }[locale];
+  const talesLabel = {
+    be: "Перайсці да казак",
+    ru: "Перейти к сказкам",
+    en: "Explore the tales",
+  }[locale];
+
   return (
-    <div className="old-home">
-      <main className="old-home__container" id="main">
-        <h1 className="visually-hidden">Nevrida — {t.seo.homeTitle}</h1>
-        <img className="old-home__band" src="/legacy/home/band.webp" width="640" height="424" alt="Музычны гурт Nevrida" fetchPriority="high" />
-        <nav className="old-home__social" aria-label="Nevrida social links">
-          {oldSocials.map(({ id, label, url }) => (
-            <a key={id} href={url} target="_blank" rel="noopener noreferrer" aria-label={label}>
-              <img src={`/legacy/home/social/${id}.svg`} width="50" height="50" alt="" />
-            </a>
-          ))}
-        </nav>
-        <img className="old-home__window" src="/legacy/home/okno.webp" width="200" height="200" alt="" loading="lazy" />
-        <section className="old-home__albums" aria-label="Nevrida releases">
-          {oldAlbums.map(({ id, url }) => (
-            <a className="old-home__album" key={id} href={url} target="_blank" rel="noopener noreferrer" aria-label={`Listen to Nevrida — ${id}`}>
-              <img className="old-home__album-cover" src={`/legacy/home/albums/${id}.webp`} alt={id.replace(/-/g, " ")} loading="lazy" width="200" height="200" />
-              <img className="old-home__album-play" src="/legacy/home/play-button.svg" alt="" width="58" height="58" loading="lazy" />
-            </a>
-          ))}
+    <div className="site-shell landing-scene">
+      <SiteHeader locale={locale} />
+      <main id="main" className="landing-main">
+        <section className="landing-hero" aria-label="Nevrida">
+          <div className="landing-hero__brand">
+            <img className="landing-hero__wordmark" src="/brand/wordmark.svg" width="900" height="517" alt="Nevrida" fetchPriority="high" />
+            <p className="landing-hero__genre">{genre}</p>
+          </div>
+          <div className="landing-hero__polaroids" aria-hidden="true">
+            {heroArt.map((src, index) => (
+              <figure className={`landing-hero__polaroid landing-hero__polaroid--${index + 1}`} key={src}>
+                <img src={src} alt="" width="434" height="434" loading="lazy" />
+              </figure>
+            ))}
+          </div>
         </section>
-        <div className="old-home__video">
-          <iframe title="Nevrida — official music video" src="https://www.youtube-nocookie.com/embed/EMILcfZ-vsk" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />
-        </div>
-        <nav className="old-home__tales-nav" aria-label="Stories">
-          <Link href={pathFor(locale, "intro")}>{t.navigation.tales} <span aria-hidden="true">↗</span></Link>
-          <Link href={pathFor(locale, "nevrida2")}>{t.navigation.about}</Link>
-          <span className="old-home__languages">
-            {(["be", "ru", "en"] as const).map(code => <Link key={code} className={locale===code ? "old-home__lang-active" : ""} href={pathFor(code)} lang={code} hrefLang={code}>{code.toUpperCase()}</Link>)}
-          </span>
-        </nav>
+
+        <section className="landing-about" aria-labelledby="landing-about-title">
+          <h1 className="landing-about__headline" id="landing-about-title">
+            <span>{bandHeading}</span>
+            <em>Nevrida</em>
+          </h1>
+          <div className="landing-about__text">
+            {band.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+            <Link className="editorial-link" href={pathFor(locale, "nevrida2")}>{aboutLabel}<span aria-hidden="true">↗</span></Link>
+          </div>
+        </section>
+
+        <section className="landing-tales" aria-labelledby="landing-tales-title">
+          <div className="landing-tales__heading">
+            <h2 id="landing-tales-title">{tales.title}</h2>
+            <Link className="editorial-link" href={pathFor(locale, "nevrida1")}>{talesLabel}<span aria-hidden="true">↗</span></Link>
+          </div>
+          <div className="landing-tales__visual" aria-hidden="true" />
+          <p className="landing-tales__description">{tales.intro[1]}</p>
+        </section>
+
+        <StreamingLinks heading={band.streams} />
       </main>
-      <footer className="old-home__footer" id="contacts">
-        <p>{locale === "be" ? "па пытаннях арганізацыі канцэртаў:" : locale === "en" ? "for concert bookings:" : "по вопросам организации концертов:"}</p>
-        <p><a href="tel:+375291669234">+375(29)1669234</a> / <a href="mailto:nevridaland@gmal.com">nevridaland@gmal.com</a></p>
-        <p>© Nevrida</p>
-      </footer>
+      <SiteFooter locale={locale} />
     </div>
   );
 }
