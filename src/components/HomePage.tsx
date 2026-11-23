@@ -14,8 +14,8 @@ function Polaroid({
   dimensions,
   kind,
 }: {
-  desktop: BoxRect;
-  mobile: BoxRect;
+  desktop: BoxRect & { h: number };
+  mobile: BoxRect & { h: number };
   picture: string;
   dimensions: { dx: number; dy: number; dw: number; dh: number; mx: number; my: number; mw: number; mh: number };
   kind: string;
