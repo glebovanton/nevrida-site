@@ -3,7 +3,7 @@ import { messages, pathFor, type Locale } from "@/data/i18n";
 import { Brand } from "./Brand";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
-export function SiteHeader({ locale, slug }: { locale: Locale; slug?: string }) {
+export function SiteHeader({ locale, slug, figmaAssets = false }: { locale: Locale; slug?: string; figmaAssets?: boolean }) {
   const t = messages[locale];
   const menu = [
     { id: "tales", label: t.navigation.tales, href: pathFor(locale, "nevrida1") },
@@ -14,7 +14,7 @@ export function SiteHeader({ locale, slug }: { locale: Locale; slug?: string }) 
   return (
     <header className="site-header">
       <a className="skip-link" href="#main">{t.accessibility.skip}</a>
-      <Brand locale={locale} />
+      <Brand locale={locale} figmaAssets={figmaAssets} />
       <div className="site-header__right">
         <nav className="desktop-nav" aria-label={t.accessibility.menu}>
           {menu.map(({ id, href, label }, i) => (

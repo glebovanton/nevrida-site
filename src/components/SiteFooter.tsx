@@ -2,12 +2,12 @@ import { Brand } from "./Brand";
 import { messages, type Locale } from "@/data/i18n";
 import { site } from "@/data/site";
 
-export function SiteFooter({ locale }: { locale: Locale }) {
+export function SiteFooter({ locale, figmaAssets = false }: { locale: Locale; figmaAssets?: boolean }) {
   const t = messages[locale].footer;
   return (
     <footer className="site-footer" id="contacts">
       <div className="site-footer__top">
-        <Brand locale={locale} large />
+        <Brand locale={locale} large figmaAssets={figmaAssets} />
         <div className="site-footer__contacts">
           <p className="site-footer__heading">{t.contacts}</p>
           <a href={site.phoneHref}>{site.phoneLabel}</a>
