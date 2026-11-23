@@ -9,7 +9,7 @@
 .landing-scene::before { content: ""; position: absolute; inset: 0 0 auto; height: 83rem; z-index: -1; pointer-events: none; background: radial-gradient(ellipse at 72% 23%, #59463236, transparent 54%), linear-gradient(0deg, #0a0a09, #151310 75%, #0a0a09); }
 .landing-main { position: relative; width: min(100%, 90rem); margin: 0 auto; flex: 1; }
 .landing-hero { position: relative; min-height: 38.5rem; padding: 1rem 3rem; display: flex; align-items: flex-start; }
-.landing-hero__brand { position: relative; z-index: 2; width: min(57vw, 47rem); padding-top: 3rem; }
+.landing-hero__brand { position: relative; z-index: 4; width: min(57vw, 47rem); padding-top: 3rem; }
 .landing-hero__wordmark { display: block; width: 100%; max-height: 29rem; height: auto; object-fit: contain; }
 .landing-hero__genre { margin: -3.9rem 0 0 29%; color: #d7c6a0; font: 400 clamp(1.1rem, 2.1vw, 2rem)/1.2 var(--font-menu); letter-spacing: .06em; }
 .landing-hero__polaroids { position: absolute; inset: 0 0 0 45%; pointer-events: none; }
