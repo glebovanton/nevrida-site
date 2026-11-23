@@ -1,0 +1,476 @@
+/* Song screens are measured from four owner-provided Figma exports:
+   1440 x 1511/1999 and 360 x 1192/1988 (closed/open lyrics).
+   Styles are intentionally scoped: they never change home or editorial pages. */
+.song-figma {
+  --song-gold: #be9c4c;
+  --song-paper: #ede1ce;
+  width: 100%;
+  max-width: 1440px;
+  min-height: 0;
+  margin-inline: auto;
+  overflow: clip;
+  container-type: inline-size;
+  background: #030202;
+  isolation: isolate;
+}
+.song-figma__background {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background: #030202;
+}
+.song-figma__background::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 88.61111cqw;
+  /* Figma IMAGE/STRETCH: transform [0.62509, 0.14036], [0.77271, 0.13273].
+     Preserve the designer's original art crop rather than CSS background-cover. */
+  background-image: linear-gradient(to bottom, transparent 0%, transparent 43%, rgba(0,0,0,.25) 61%, #000 100%), var(--song-scene-desktop);
+  background-size: 100% 100%, 159.977% 129.415%;
+  background-position: center center, 37.43% 58.43%;
+  background-repeat: no-repeat, no-repeat;
+}
+.song-figma__background::after {
+  content: "";
+  position: absolute;
+  inset: 44.8cqw 0 0;
+  background-image: url('/figma/song/grunge.webp');
+  background-size: 112% auto;
+  background-position: center top;
+  background-repeat: repeat-y;
+  opacity: .19;
+}
+/* Keep the original header and locale navigation interactive. */
+.song-figma .site-header {
+  position: relative;
+  flex: 0 0 auto;
+  height: 7.9166667cqw;
+  max-width: none;
+  padding: 2.5cqw 2.777778cqw 0;
+  margin: 0;
+  align-items: flex-start;
+}
+.song-figma .site-header .brand { width: 4.35cqw; height: 2.89cqw; }
+.song-figma .site-header__right { margin-top: .82cqw; }
+.song-figma .desktop-nav { gap: 2.3cqw; }
+.song-figma .desktop-nav a { font: 400 1.294cqw/1.1 var(--font-menu); }
+.song-figma .lang-switcher--desktop {
+  position: absolute;
+  left: 8.1%;
+  top: 3.12cqw;
+  opacity: .78;
+}
+.song-figma .lang-switcher--desktop > summary { font-size: 1.03cqw; }
+.song-figma .mobile-nav { display: none; }
+
+.song-figma__main {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 4.444444cqw 0 16.180556cqw;
+}
+.song-figma:has(.lyrics[open]) .song-figma__main { padding-bottom: 7.083333cqw; }
+.song-figma__frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 71.25%;
+  margin: 0 auto;
+  padding: 0 0 9.236111cqw;
+  color: #080705;
+  text-align: center;
+  isolation: isolate;
+}
+.song-figma:has(.lyrics[open]) .song-figma__frame { padding-bottom: 9.861111cqw; }
+.song-figma__frame-art,
+.song-figma__frame-fill {
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+}
+.song-figma__frame-art {
+  inset: 0;
+  background: url('/figma/song/frame-desktop-closed.svg') center center / 100% 100% no-repeat;
+}
+.song-figma__frame-fill { display: none; }
+.song-figma:has(.lyrics[open]) .song-figma__frame-art {
+  background: url('/figma/song/frame-desktop-open.svg') center center / 100% 100% no-repeat;
+}
+/* For tracks longer/shorter than the Figma example, preserve the filigree
+   at native scale and extend only the straight frame body. */
+.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art {
+  background: none;
+}
+.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::before,
+.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 18.06cqw;
+  background-image: url('/figma/song/frame-desktop-open.svg');
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::before { top: 0; background-position: top center; }
+.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::after { bottom: 0; background-position: bottom center; }
+.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-fill {
+  display: block;
+  z-index: -2;
+  inset: 11.1cqw 0 11.1cqw;
+  background:
+    linear-gradient(to right, transparent calc(3.4% - 1px), var(--song-gold) calc(3.4% - 1px), var(--song-gold) 3.4%, transparent 3.4%, transparent 96.6%, var(--song-gold) 96.6%, var(--song-gold) calc(96.6% + 1px), transparent calc(96.6% + 1px)),
+    var(--song-paper);
+}
+.song-figma__number {
+  position: relative;
+  flex: 0 0 auto;
+  width: 7.361111cqw;
+  height: 5.069444cqw;
+  margin-top: 5.694444cqw;
+  border: .12cqw solid var(--song-gold);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--song-gold);
+}
+.song-figma__number::before,
+.song-figma__number::after {
+  content: "";
+  position: absolute;
+  top: 48%;
+  width: .42cqw;
+  height: .42cqw;
+  border-radius: 50%;
+  background: var(--song-gold);
+}
+.song-figma__number::before { left: 18%; }
+.song-figma__number::after { right: 18%; }
+.song-figma__number-digits { font: 400 1.955cqw/1 var(--font-display); }
+.song-figma__title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 54%;
+  height: 10.208333cqw;
+  margin: 1.805556cqw 0 0;
+  color: #050503;
+  font: 700 5.55cqw/.83 var(--font-display);
+  letter-spacing: -.037em;
+  text-wrap: balance;
+}
+.song-figma__frame--long-title .song-figma__title { width: 67%; font-size: 3.35cqw; line-height: 1; letter-spacing: -.025em; }
+.song-figma__rule {
+  flex: 0 0 auto;
+  width: 19.722222cqw;
+  height: .069444cqw;
+  margin-top: 2.291667cqw;
+  background: var(--song-gold);
+}
+.song-figma__music { width: 100%; margin-top: 2.152778cqw; }
+.song-figma__music-icons {
+  position: relative;
+  width: 52.013889cqw;
+  height: 5.694444cqw;
+  margin: 0 auto;
+}
+.song-figma__music-icons picture,
+.song-figma__music-icons img { display: block; width: 100%; height: 100%; }
+.song-figma__music-hitareas {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.1cqw;
+}
+.song-figma__music-hitareas > a,
+.song-figma__music-hitareas > span { display: block; border-radius: .2cqw; }
+.song-figma__music-hitareas > a:hover { background: #e6c45a24; }
+.song-figma__music-hitareas > a:focus-visible { outline: .24cqw solid #e0a928; outline-offset: .2cqw; }
+.song-figma__music-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 2.013889cqw;
+  margin: 1.458333cqw auto 0;
+  font: 500 1.319444cqw/1.4 var(--font-text);
+  color: #898989;
+}
+.song-figma__music-more > * { text-decoration: underline; text-underline-offset: .18cqw; }
+.song-figma__music-more a:hover { color: #453c2e; }
+.song-figma .lyrics {
+  width: 100%;
+  max-width: 100%;
+  margin: 2.986111cqw auto 0;
+}
+.song-figma .lyrics__summary {
+  width: 17.430556cqw;
+  height: 2.430556cqw;
+  margin: 0 auto;
+  border-radius: .43cqw;
+  background: #000;
+  color: #fff;
+  font: 500 1.319444cqw/1.2 var(--font-text);
+  text-transform: lowercase;
+}
+.song-figma .lyrics[open] { display: flex; flex-direction: column; align-items: center; }
+.song-figma .lyrics[open] .lyrics__summary { order: 2; margin-top: 0; }
+.song-figma .lyrics__content {
+  width: 33.541667cqw;
+  max-width: none;
+  flex: 0 0 auto;
+  margin: 0 auto;
+  padding: 0;
+  color: #6a5327;
+  font: 500 1.319444cqw/1.19 var(--font-text);
+  white-space: pre-line;
+  overflow-wrap: normal;
+  text-align: center;
+}
+.song-figma .lyrics[open] .lyrics__content { order: 1; }
+
+.song-figma .site-footer {
+  position: relative;
+  flex: 0 0 auto;
+  width: 100%;
+  min-height: 0;
+  height: 25.277778cqw;
+  padding: 0 2.777778cqw;
+  background: transparent;
+}
+.song-figma .site-footer::before { display: none; }
+.song-figma .site-footer__top {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 20.763889cqw;
+  margin: 0;
+}
+.song-figma .site-footer__top .brand {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 18.75cqw;
+  height: 10.763889cqw;
+}
+.song-figma .site-footer__contacts,
+.song-figma .site-footer__social {
+  position: absolute;
+  top: 3.333333cqw;
+  left: 55.3%;
+  margin: 0;
+  gap: 0;
+  font: 500 1.319444cqw/1.42 var(--font-text);
+}
+.song-figma .site-footer__social { left: 76.1%; }
+.song-figma .site-footer__heading { margin: 0 0 .12cqw; color: #a19d99; font-weight: 400; }
+.song-figma .site-footer__bottom {
+  max-width: none;
+  width: 100%;
+  border-top: 1px solid #777;
+  padding: .68cqw 0;
+  margin: 0;
+  font: 400 1.319444cqw/1.3 var(--font-text);
+  color: #999;
+}
+
+@media (max-width: 700px) {
+  .song-figma { max-width: 420px; }
+  .song-figma__background::before {
+    height: 359.722222cqw;
+    width: 248.333333cqw;
+    left: -72.222222cqw;
+    top: -12.5cqw;
+    background-image: linear-gradient(to bottom, transparent 0%, transparent 43%, rgba(0,0,0,.3) 65%, #000 100%), var(--song-scene-mobile);
+    background-size: 100% 100%, 159.977% 129.415%;
+    background-position: center center, 37.43% 58.43%;
+  }
+  .song-figma__background::after {
+    inset: 201.666667cqw 0 0;
+    background-size: auto 156.944444cqw;
+    background-position: center top;
+  }
+  .song-figma .site-header {
+    width: 100%;
+    height: 26.111111cqw;
+    padding: 7.222222cqw 5.555556cqw 0;
+    align-items: flex-start;
+  }
+  .song-figma .site-header .brand { width: 14.166667cqw; height: 9.444444cqw; }
+  .song-figma .site-header__right { display: none; }
+  .song-figma .mobile-nav { display: block; position: static; }
+  .song-figma .mobile-nav__toggle {
+    position: absolute;
+    top: 7.777778cqw;
+    right: 5.555556cqw;
+    width: 10.833333cqw;
+    height: 7.222222cqw;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .song-figma .mobile-nav__toggle span { width: 100%; height: .555556cqw; }
+  .song-figma .mobile-nav__panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 28;
+    min-height: 95cqw;
+  }
+  .song-figma__main { padding: 0 0 18.611111cqw; }
+  .song-figma:has(.lyrics[open]) .song-figma__main { padding-bottom: 18.611111cqw; }
+  .song-figma__frame { width: 88.888889%; padding-bottom: 21.388889cqw; }
+  .song-figma:has(.lyrics[open]) .song-figma__frame { padding-bottom: 25.555556cqw; }
+  .song-figma__frame-art {
+    background-image: url('/figma/song/frame-mobile-closed.svg');
+  }
+  .song-figma:has(.lyrics[open]) .song-figma__frame-art {
+    background-image: url('/figma/song/frame-mobile-open.svg');
+  }
+  .song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art { background: none; }
+  .song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::before,
+  .song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::after {
+    height: 83.333333cqw;
+    background-image: url('/figma/song/frame-mobile-open.svg');
+  }
+  .song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-fill {
+    inset: 55.555556cqw 0 55.555556cqw;
+  }
+  .song-figma__number {
+    width: 17.222222cqw;
+    height: 11.944444cqw;
+    margin-top: 11.944444cqw;
+    border-width: .28cqw;
+  }
+  .song-figma__number::before,
+  .song-figma__number::after { width: .7cqw; height: .7cqw; }
+  .song-figma__number-digits { font-size: 4.45cqw; }
+  .song-figma__title {
+    width: 86%;
+    height: 20cqw;
+    margin-top: 8.055556cqw;
+    font: 700 11.45cqw/.85 var(--font-display);
+    letter-spacing: -.04em;
+  }
+  .song-figma__frame--long-title .song-figma__title { width: 91%; font-size: 6.6cqw; line-height: 1; }
+  .song-figma__rule { width: 44.166667cqw; height: .277778cqw; margin-top: 8.333333cqw; }
+  .song-figma__music { margin-top: 6.666667cqw; }
+  .song-figma__music-icons { width: 60cqw; height: 80.555556cqw; }
+  .song-figma__music-hitareas { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); gap: 3.4cqw 3.3cqw; }
+  .song-figma__music-more {
+    min-height: 8.055556cqw;
+    margin-top: 5cqw;
+    font: 400 5.277778cqw/1.2 var(--font-text);
+  }
+  .song-figma .lyrics { margin-top: 10.833333cqw; }
+  .song-figma:has(.lyrics[open]) .lyrics { margin-top: 10cqw; }
+  .song-figma .lyrics__summary {
+    width: 50.277778cqw;
+    height: 8.5cqw;
+    border-radius: 2.1cqw;
+    font: 500 4.25cqw/1.2 var(--font-text);
+  }
+  .song-figma .lyrics__content {
+    width: 61.944444cqw;
+    font: 500 4.722222cqw/1.18 var(--font-text);
+  }
+  .song-figma .lyrics[open] .lyrics__summary { margin-top: 6.666667cqw; }
+  .song-figma .site-footer {
+    height: 84.722222cqw;
+    padding: 0 5.555556cqw;
+  }
+  .song-figma .site-footer__top {
+    height: 73.611111cqw;
+    display: block;
+    position: relative;
+  }
+  .song-figma .site-footer__top .brand {
+    width: 56.388889cqw;
+    height: 32.5cqw;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0;
+  }
+  .song-figma .site-footer__contacts,
+  .song-figma .site-footer__social {
+    position: absolute;
+    top: 40.833333cqw;
+    left: 0;
+    width: 61%;
+    margin: 0;
+    font: 500 3.611111cqw/1.5 var(--font-text);
+  }
+  .song-figma .site-footer__social { left: 70%; width: 32%; }
+  .song-figma .site-footer__bottom {
+    height: 11.111111cqw;
+    padding-top: 2.222222cqw;
+    font: 400 3.611111cqw/1.2 var(--font-text);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .song-figma * { scroll-behavior: auto; }
+}
+
+/* The exporter's SVG omitted the clipping mask for four image-pattern
+   fills, accidentally revealing book text behind the ornaments. The SVG
+   arches/paper are retained; gold decorations derive from the actual Figma
+   source image with non-gold pixels masked out. */
+.song-figma__frame-rails {
+  position: absolute;
+  pointer-events: none;
+  z-index: -1;
+  top: 5.76cqw;
+  bottom: 5.76cqw;
+  left: 2.36cqw;
+  right: 2.36cqw;
+  border-inline: .28cqw double var(--song-gold);
+}
+.song-figma:has(.lyrics[open]) .song-figma__frame-rails {
+  top: 4.79cqw;
+  bottom: 5.14cqw;
+}
+.song-figma__ornament {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  width: 13.89cqw;
+  height: 13.89cqw;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+}
+.song-figma__ornament--top-left { top: 5.76cqw; left: 1.04cqw; background-image: url('/figma/song/ornament-top-left.webp'); }
+.song-figma__ornament--top-right { top: 5.76cqw; right: 1.04cqw; background-image: url('/figma/song/ornament-top-right.webp'); }
+.song-figma__ornament--bottom-left { bottom: 5.76cqw; left: 1.04cqw; background-image: url('/figma/song/ornament-bottom-left.webp'); }
+.song-figma__ornament--bottom-right { bottom: 5.76cqw; right: 1.04cqw; background-image: url('/figma/song/ornament-bottom-right.webp'); }
+.song-figma:has(.lyrics[open]) .song-figma__ornament--top-left,
+.song-figma:has(.lyrics[open]) .song-figma__ornament--top-right { top: 4.79cqw; }
+.song-figma:has(.lyrics[open]) .song-figma__ornament--bottom-left,
+.song-figma:has(.lyrics[open]) .song-figma__ornament--bottom-right { bottom: 5.14cqw; }
+.song-figma__title:has(> span) { flex-direction: column; }
+.song-figma__title > span { display:block; white-space: nowrap; }
+@media (max-width:700px) {
+  .song-figma__frame-rails { top: 6.39cqw; bottom: 6.39cqw; left: 3.89cqw; right: 3.89cqw; border-inline-width:.56cqw; }
+  .song-figma:has(.lyrics[open]) .song-figma__frame-rails { top: 6.39cqw; bottom: 6.39cqw; }
+  .song-figma__ornament { width: 25.83cqw; height: 25cqw; }
+  .song-figma__ornament--top-left { top: 5.83cqw; left: 2.5cqw; }
+  .song-figma__ornament--top-right { top: 5.83cqw; right: 2.5cqw; }
+  .song-figma__ornament--bottom-left { bottom: 6.39cqw; left: 2.5cqw; }
+  .song-figma__ornament--bottom-right { bottom: 6.39cqw; right: 2.5cqw; }
+  .song-figma:has(.lyrics[open]) .song-figma__ornament--top-left,
+  .song-figma:has(.lyrics[open]) .song-figma__ornament--top-right { top: 5.83cqw; }
+  .song-figma:has(.lyrics[open]) .song-figma__ornament--bottom-left,
+  .song-figma:has(.lyrics[open]) .song-figma__ornament--bottom-right { bottom: 6.39cqw; }
+  .song-figma__title:has(> span) { font-size: 10.2cqw; }
+}
