@@ -86,46 +86,122 @@
   isolation: isolate;
 }
 .song-figma:has(.lyrics[open]) .song-figma__frame { padding-bottom: 9.861111cqw; }
-.song-figma__frame-art,
-.song-figma__frame-fill {
-  position: absolute;
-  pointer-events: none;
-  z-index: -1;
+/* Piecewise Figma frame: the paper and straight rails flex with content,
+   while vector arches and original corner ornaments NEVER stretch vertically.
+   All measurements below come from frame 1:3235 (1026x736) and 1:3572 (1026x1355). */
+.song-figma__frame {
+  --frame-paper-top: 5.138889cqw; /* 74px at 1440px */
+  --frame-paper-bottom: 4.791667cqw; /* 69px */
+  --frame-dome-top-h: 14.305556cqw; /* 206px */
+  --frame-dome-bottom-h: 14.583333cqw; /* 210px */
+  --frame-ornament-top: 5.763889cqw; /* 83px */
+  --frame-ornament-bottom: 5.763889cqw;
+  --frame-ornament-inset: 1.041667cqw; /* 15px */
+  --frame-ornament-size: 13.888889cqw; /* 200px */
+  --frame-rails-top: 6.944444cqw;
+  --frame-rails-bottom: 6.944444cqw;
+  --frame-rails-inset: 3.07%; /* 31.5/1026 */
+  --frame-rails-width: .347222cqw; /* 5px */
+  --frame-arch-top: url('/figma/song/frame/arch-desktop-closed-top.svg');
+  --frame-arch-bottom: url('/figma/song/frame/arch-desktop-closed-bottom.svg');
 }
-.song-figma__frame-art {
+.song-figma:has(.lyrics[open]) .song-figma__frame {
+  --frame-paper-top: 3.75cqw; /* 54px */
+  --frame-paper-bottom: 3.888889cqw; /* 56px */
+  --frame-dome-top-h: 12.777778cqw; /* 184px */
+  --frame-dome-bottom-h: 11.944444cqw; /* 172px */
+  --frame-ornament-top: 4.791667cqw; /* 69px */
+  --frame-ornament-bottom: 5.138889cqw; /* 74px */
+  --frame-ornament-inset: 1.458333cqw; /* 21px */
+  --frame-ornament-size: 13.333333cqw; /* 192px */
+  --frame-rails-top: 17.847222cqw; /* 257px, Figma's open long rail */
+  --frame-rails-bottom: 18.194444cqw; /* 262px */
+  --frame-arch-top: url('/figma/song/frame/arch-desktop-open-top.svg');
+  --frame-arch-bottom: url('/figma/song/frame/arch-desktop-open-bottom.svg');
+}
+.song-figma__frame-decoration {
+  position: absolute;
   inset: 0;
-  background: url('/figma/song/frame-desktop-closed.svg') center center / 100% 100% no-repeat;
+  z-index: -1;
+  pointer-events: none;
 }
-.song-figma__frame-fill { display: none; }
-.song-figma:has(.lyrics[open]) .song-figma__frame-art {
-  background: url('/figma/song/frame-desktop-open.svg') center center / 100% 100% no-repeat;
+.song-figma__frame-decoration > span { position: absolute; display: block; }
+.song-figma__paper-rect {
+  left: 0;
+  right: 0;
+  top: var(--frame-paper-top);
+  bottom: var(--frame-paper-bottom);
+  background-color: #ede2d0;
 }
-/* For tracks longer/shorter than the Figma example, preserve the filigree
-   at native scale and extend only the straight frame body. */
-.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art {
-  background: none;
+.song-figma__paper-dome { border-radius: 50%; background-color: #ede2d0; }
+.song-figma__paper-dome--top {
+  top: 0;
+  left: 13.645224%; /* x=140 of 1026 */
+  width: 72.709552%; /* 746 of 1026 */
+  height: var(--frame-dome-top-h);
 }
-.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::before,
-.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::after {
-  content: "";
-  position: absolute;
+.song-figma__paper-dome--bottom {
+  bottom: 0;
+  left: 12.768031%; /* 131 of 1026 */
+  width: 74.463938%; /* 764 of 1026 */
+  height: var(--frame-dome-bottom-h);
+}
+.song-figma__arch {
   left: 0;
   width: 100%;
-  height: 18.06cqw;
-  background-image: url('/figma/song/frame-desktop-open.svg');
-  background-size: 100% auto;
+  aspect-ratio: 1026 / 120;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.song-figma__arch--top { top: 0; background-image: var(--frame-arch-top); }
+.song-figma__arch--bottom { bottom: 0; background-image: var(--frame-arch-bottom); }
+.song-figma__frame-rails {
+  top: var(--frame-rails-top);
+  bottom: var(--frame-rails-bottom);
+  left: var(--frame-rails-inset);
+  right: var(--frame-rails-inset);
+  border-inline: var(--frame-rails-width) solid #bd9d52;
+}
+.song-figma__frame-rails::before,
+.song-figma__frame-rails::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-inline: .07cqw solid #bd9d52;
+}
+.song-figma__frame-rails::before { left: .24cqw; right: .24cqw; }
+.song-figma__frame-rails::after { left: .43cqw; right: .43cqw; border-inline-width: .035cqw; }
+.song-figma__ornament {
+  width: var(--frame-ornament-size);
+  height: var(--frame-ornament-size);
+  background-size: contain;
+  background-position: center;
   background-repeat: no-repeat;
 }
-.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::before { top: 0; background-position: top center; }
-.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::after { bottom: 0; background-position: bottom center; }
-.song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-fill {
-  display: block;
-  z-index: -2;
-  inset: 11.1cqw 0 11.1cqw;
-  background:
-    linear-gradient(to right, transparent calc(3.4% - 1px), var(--song-gold) calc(3.4% - 1px), var(--song-gold) 3.4%, transparent 3.4%, transparent 96.6%, var(--song-gold) 96.6%, var(--song-gold) calc(96.6% + 1px), transparent calc(96.6% + 1px)),
-    var(--song-paper);
+.song-figma__ornament--top-left {
+  top: var(--frame-ornament-top);
+  left: var(--frame-ornament-inset);
+  background-image: url('/figma/song/frame/ornament-top-left.png');
 }
+.song-figma__ornament--top-right {
+  top: var(--frame-ornament-top);
+  right: var(--frame-ornament-inset);
+  background-image: url('/figma/song/frame/ornament-top-right.png');
+}
+.song-figma__ornament--bottom-left {
+  bottom: var(--frame-ornament-bottom);
+  left: var(--frame-ornament-inset);
+  background-image: url('/figma/song/frame/ornament-bottom-left.png');
+}
+.song-figma__ornament--bottom-right {
+  bottom: var(--frame-ornament-bottom);
+  right: var(--frame-ornament-inset);
+  background-image: url('/figma/song/frame/ornament-bottom-right.png');
+}
+.song-figma__title:has(> span) { flex-direction: column; }
+.song-figma__title > span { display:block; white-space: nowrap; }
 .song-figma__number {
   position: relative;
   flex: 0 0 auto;
@@ -165,7 +241,7 @@
   letter-spacing: -.037em;
   text-wrap: balance;
 }
-.song-figma__frame--long-title .song-figma__title { width: 67%; font-size: 3.35cqw; line-height: 1; letter-spacing: -.025em; }
+.song-figma__frame--long-title .song-figma__title { width: 67%; height: auto; min-height: 10.208333cqw; padding-block: 1.25cqw; font-size: 3.35cqw; line-height: 1.08; letter-spacing: -.025em; white-space: normal; overflow-wrap: anywhere; }
 .song-figma__rule {
   flex: 0 0 auto;
   width: 19.722222cqw;
@@ -281,8 +357,11 @@
   color: #999;
 }
 
-@media (max-width: 700px) {
-  .song-figma { max-width: 420px; }
+@media (max-width: 1023px) {
+  /* Tablet widths use the readable two-column/mobile composition.
+     The source Figma art is 360px; expand it fluidly up to 520px and
+     centre that single-column art rather than shrinking six icons/lyrics. */
+  .song-figma { max-width: 520px; }
   .song-figma__background::before {
     height: 359.722222cqw;
     width: 248.333333cqw;
@@ -330,21 +409,45 @@
   .song-figma:has(.lyrics[open]) .song-figma__main { padding-bottom: 18.611111cqw; }
   .song-figma__frame { width: 88.888889%; padding-bottom: 21.388889cqw; }
   .song-figma:has(.lyrics[open]) .song-figma__frame { padding-bottom: 25.555556cqw; }
-  .song-figma__frame-art {
-    background-image: url('/figma/song/frame-mobile-closed.svg');
+  /* Original 320px mobile Figma frame is independently measured: x20..340.
+     The same ornaments/arches keep their proportions at 320/360/390/420px. */
+  .song-figma__frame {
+    --frame-paper-top: 4.166667cqw; /* 15px */
+    --frame-paper-bottom: 4.444444cqw; /* 16px */
+    --frame-dome-top-h: 31.388889cqw; /* 113px */
+    --frame-dome-bottom-h: 32.222222cqw; /* 116px */
+    --frame-ornament-top: 6.666667cqw; /* 24px */
+    --frame-ornament-bottom: 6.388889cqw; /* 23px */
+    --frame-ornament-inset: 2.5cqw; /* 9px */
+    --frame-ornament-size: 25.833333cqw; /* 93px */
+    --frame-rails-top: 30cqw; /* 108px */
+    --frame-rails-bottom: 29.444444cqw; /* 106px */
+    --frame-rails-inset: 4.34375%; /* 13.9/320 */
+    --frame-rails-width: .611111cqw; /* 2.2px */
+    --frame-arch-top: url('/figma/song/frame/arch-mobile-closed-top.svg');
+    --frame-arch-bottom: url('/figma/song/frame/arch-mobile-closed-bottom.svg');
   }
-  .song-figma:has(.lyrics[open]) .song-figma__frame-art {
-    background-image: url('/figma/song/frame-mobile-open.svg');
+  .song-figma:has(.lyrics[open]) .song-figma__frame {
+    --frame-paper-top: 4.166667cqw;
+    --frame-paper-bottom: 4.722222cqw; /* 17px */
+    --frame-dome-top-h: 31.388889cqw;
+    --frame-dome-bottom-h: 32.222222cqw;
+    --frame-ornament-top: 6.666667cqw;
+    --frame-ornament-bottom: 6.388889cqw;
+    --frame-ornament-inset: 2.5cqw;
+    --frame-ornament-size: 25.833333cqw;
+    --frame-rails-top: 30cqw;
+    --frame-rails-bottom: 29.444444cqw;
+    --frame-rails-inset: 4.34375%;
+    --frame-rails-width: .611111cqw;
+    --frame-arch-top: url('/figma/song/frame/arch-mobile-open-top.svg');
+    --frame-arch-bottom: url('/figma/song/frame/arch-mobile-open-bottom.svg');
   }
-  .song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art { background: none; }
-  .song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::before,
-  .song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-art::after {
-    height: 83.333333cqw;
-    background-image: url('/figma/song/frame-mobile-open.svg');
-  }
-  .song-figma:not([data-song="intro"]):has(.lyrics[open]) .song-figma__frame-fill {
-    inset: 55.555556cqw 0 55.555556cqw;
-  }
+  .song-figma__paper-dome--top { left: 13.645%; width: 72.71%; }
+  .song-figma__paper-dome--bottom { left: 12.8125%; width: 74.375%; }
+  .song-figma__arch { aspect-ratio: 320 / 82; }
+  .song-figma__frame-rails::before { left: .86cqw; right: .86cqw; border-inline-width: .1944cqw; }
+  .song-figma__frame-rails::after { left: 1.14cqw; right: 1.14cqw; border-inline-width: .0833cqw; }
   .song-figma__number {
     width: 17.222222cqw;
     height: 11.944444cqw;
@@ -361,7 +464,7 @@
     font: 700 11.45cqw/.85 var(--font-display);
     letter-spacing: -.04em;
   }
-  .song-figma__frame--long-title .song-figma__title { width: 91%; font-size: 6.6cqw; line-height: 1; }
+  .song-figma__frame--long-title .song-figma__title { width: 91%; height: auto; min-height: 20cqw; padding-block: 2cqw; font-size: 6.6cqw; line-height: 1.12; }
   .song-figma__rule { width: 44.166667cqw; height: .277778cqw; margin-top: 8.333333cqw; }
   .song-figma__music { margin-top: 6.666667cqw; }
   .song-figma__music-icons { width: 60cqw; height: 80.555556cqw; }
@@ -422,55 +525,3 @@
   .song-figma * { scroll-behavior: auto; }
 }
 
-/* The exporter's SVG omitted the clipping mask for four image-pattern
-   fills, accidentally revealing book text behind the ornaments. The SVG
-   arches/paper are retained; gold decorations derive from the actual Figma
-   source image with non-gold pixels masked out. */
-.song-figma__frame-rails {
-  position: absolute;
-  pointer-events: none;
-  z-index: -1;
-  top: 5.76cqw;
-  bottom: 5.76cqw;
-  left: 2.36cqw;
-  right: 2.36cqw;
-  border-inline: .28cqw double var(--song-gold);
-}
-.song-figma:has(.lyrics[open]) .song-figma__frame-rails {
-  top: 4.79cqw;
-  bottom: 5.14cqw;
-}
-.song-figma__ornament {
-  position: absolute;
-  z-index: -1;
-  pointer-events: none;
-  width: 13.89cqw;
-  height: 13.89cqw;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100% 100%;
-}
-.song-figma__ornament--top-left { top: 5.76cqw; left: 1.04cqw; background-image: url('/figma/song/ornament-top-left.webp'); }
-.song-figma__ornament--top-right { top: 5.76cqw; right: 1.04cqw; background-image: url('/figma/song/ornament-top-right.webp'); }
-.song-figma__ornament--bottom-left { bottom: 5.76cqw; left: 1.04cqw; background-image: url('/figma/song/ornament-bottom-left.webp'); }
-.song-figma__ornament--bottom-right { bottom: 5.76cqw; right: 1.04cqw; background-image: url('/figma/song/ornament-bottom-right.webp'); }
-.song-figma:has(.lyrics[open]) .song-figma__ornament--top-left,
-.song-figma:has(.lyrics[open]) .song-figma__ornament--top-right { top: 4.79cqw; }
-.song-figma:has(.lyrics[open]) .song-figma__ornament--bottom-left,
-.song-figma:has(.lyrics[open]) .song-figma__ornament--bottom-right { bottom: 5.14cqw; }
-.song-figma__title:has(> span) { flex-direction: column; }
-.song-figma__title > span { display:block; white-space: nowrap; }
-@media (max-width:700px) {
-  .song-figma__frame-rails { top: 6.39cqw; bottom: 6.39cqw; left: 3.89cqw; right: 3.89cqw; border-inline-width:.56cqw; }
-  .song-figma:has(.lyrics[open]) .song-figma__frame-rails { top: 6.39cqw; bottom: 6.39cqw; }
-  .song-figma__ornament { width: 25.83cqw; height: 25cqw; }
-  .song-figma__ornament--top-left { top: 5.83cqw; left: 2.5cqw; }
-  .song-figma__ornament--top-right { top: 5.83cqw; right: 2.5cqw; }
-  .song-figma__ornament--bottom-left { bottom: 6.39cqw; left: 2.5cqw; }
-  .song-figma__ornament--bottom-right { bottom: 6.39cqw; right: 2.5cqw; }
-  .song-figma:has(.lyrics[open]) .song-figma__ornament--top-left,
-  .song-figma:has(.lyrics[open]) .song-figma__ornament--top-right { top: 5.83cqw; }
-  .song-figma:has(.lyrics[open]) .song-figma__ornament--bottom-left,
-  .song-figma:has(.lyrics[open]) .song-figma__ornament--bottom-right { bottom: 6.39cqw; }
-  .song-figma__title:has(> span) { font-size: 10.2cqw; }
-}

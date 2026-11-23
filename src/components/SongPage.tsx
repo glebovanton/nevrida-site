@@ -33,13 +33,21 @@ export function SongPage({ song, locale }: { song: Song; locale: Locale }) {
       <SiteHeader locale={locale} slug={song.slug} figmaAssets />
       <main className="song-figma__main" id="main">
         <article className={`song-figma__frame${song.slug === "tsyabe-mala" ? " song-figma__frame--long-title" : ""}`}>
-          <span className="song-figma__frame-fill" aria-hidden="true" />
-          <span className="song-figma__frame-art" aria-hidden="true" />
-          <span className="song-figma__frame-rails" aria-hidden="true" />
-          <span className="song-figma__ornament song-figma__ornament--top-left" aria-hidden="true" />
-          <span className="song-figma__ornament song-figma__ornament--top-right" aria-hidden="true" />
-          <span className="song-figma__ornament song-figma__ornament--bottom-left" aria-hidden="true" />
-          <span className="song-figma__ornament song-figma__ornament--bottom-right" aria-hidden="true" />
+          {/* Frame is assembled from native Figma vectors + transparent original ornaments.
+              Only the paper body and straight side rails grow with lyric length.
+              Decorative corners/arches keep their native aspect ratio. */}
+          <div className="song-figma__frame-decoration" aria-hidden="true">
+            <span className="song-figma__paper-rect" />
+            <span className="song-figma__paper-dome song-figma__paper-dome--top" />
+            <span className="song-figma__paper-dome song-figma__paper-dome--bottom" />
+            <span className="song-figma__arch song-figma__arch--top" />
+            <span className="song-figma__arch song-figma__arch--bottom" />
+            <span className="song-figma__frame-rails" />
+            <span className="song-figma__ornament song-figma__ornament--top-left" />
+            <span className="song-figma__ornament song-figma__ornament--top-right" />
+            <span className="song-figma__ornament song-figma__ornament--bottom-left" />
+            <span className="song-figma__ornament song-figma__ornament--bottom-right" />
+          </div>
           <div className="song-figma__number" aria-label={`${messages[locale].accessibility.number} ${song.number}`}>
             <span className="song-figma__number-digits">{song.number}</span>
           </div>
