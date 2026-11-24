@@ -1,0 +1,278 @@
+/* Scoped styles: the shared SiteHeader/SiteFooter and every existing page remain unchanged.
+   The two reference widths are 1440 and 360 CSS pixels. Art scales uniformly. */
+$desktop: 900px;
+$mobile-limit: 560px;
+
+.page {
+  min-height: 100vh;
+  min-height: 100svh;
+  background: #000;
+  color: #fff;
+  isolation: isolate;
+}
+
+.canvas {
+  position: relative;
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: $mobile-limit;
+  min-height: 100svh;
+  margin-inline: auto;
+  background: #000 url('/figma/404/background-mobile.webp') center top / 100% auto no-repeat;
+  isolation: isolate;
+}
+
+.main {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  /* Header ends at y=84; original numeral starts at y=142.812. */
+  padding: 16.337cqw 5.5556cqw 10.6cqw;
+  text-align: center;
+}
+
+.heading {
+  width: 100%;
+  margin: 0;
+  font-weight: 500;
+}
+
+.art {
+  position: relative;
+  display: block;
+  width: 76.5444cqw;
+  max-width: 100%;
+  aspect-ratio: 275.56 / 118.347;
+  margin-inline: auto;
+  isolation: isolate;
+  /* Mobile reference group is 1.22px to the left of the canvas center. */
+  transform: translateX(-.3389cqw);
+  pointer-events: none;
+
+  > img, > picture {
+    position: absolute;
+    display: block;
+  }
+}
+
+.four {
+  width: 30.6776%;
+  height: auto;
+  top: 2.858%;
+  filter: drop-shadow(0 .45cqw .25cqw #0006);
+}
+
+.fourRight { right: 0; z-index: 2; }
+.fourLeft { left: 0; z-index: 2; }
+
+.fern {
+  /* Rotated original image-fill bounding box, not the visible alpha bounds. */
+  top: -63.214%;
+  left: 6.994%;
+  width: 94.046%;
+  height: auto;
+  z-index: 1;
+}
+
+.fernForeground {
+  z-index: 3;
+  /* Bounding box of Figma's Vector 94 boolean subtraction, relative to the fern. */
+  clip-path: inset(42.83% 15.22% 37.47% 72.70%);
+}
+
+.zero {
+  top: 0;
+  left: 34.94%;
+  width: 30.85%;
+  z-index: 2;
+
+  img { display: block; width: 100%; height: auto; }
+}
+
+.message {
+  display: block;
+  margin-top: 6.9cqw;
+  color: #828282;
+  font: 500 clamp(16px, 5.5556cqw, 25.85px)/1.21 var(--font-text);
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.home {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  width: max-content;
+  min-width: min(60.5cqw, 272px);
+  max-width: 100%;
+  margin-top: 4.5cqw;
+  padding: .5rem 1.5rem;
+  text-transform: uppercase;
+  font: 500 clamp(18px, 5.6136cqw, 25.85px)/1.21 var(--font-text);
+  isolation: isolate;
+  text-decoration: none;
+  transform: translateX(2.6cqw);
+
+  &::before {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    inset: 50% -1% auto;
+    aspect-ratio: 272 / 53;
+    background: url('/figma/404/home-ring.svg') center / contain no-repeat;
+    transform: translateY(-50%);
+    z-index: -1;
+  }
+
+  &:hover { color: #f1bdb6; }
+}
+
+/* Share site navigation/contact markup. Only the 404 shell changes sizing. */
+.canvas :global(.site-header) {
+  height: 23.3333cqw;
+  min-height: 72px;
+  padding: 7.2222cqw 5.5556cqw 0;
+  align-items: flex-start;
+}
+.canvas :global(.site-header) :global(.brand) { width: 14.1667cqw; height: 9.4444cqw; }
+.canvas :global(.site-header__right) { display: none; }
+.canvas :global(.mobile-nav) { display: block; position: static; }
+.canvas :global(.mobile-nav__toggle) {
+  position: absolute;
+  z-index: 29;
+  top: 7.7778cqw;
+  right: 5.5556cqw;
+  width: 10.8333cqw;
+  height: 7.2222cqw;
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.canvas :global(.mobile-nav__toggle)::-webkit-details-marker { display: none; }
+.canvas :global(.mobile-nav__toggle) span { display: block; height: 2px; width: 100%; background: #fff; transform-origin: center; }
+.canvas :global(.mobile-nav[open]) :global(.mobile-nav__toggle) span:first-child { transform: translateY(calc(3.6111cqw - 1px)) rotate(45deg); }
+.canvas :global(.mobile-nav[open]) :global(.mobile-nav__toggle) span:nth-child(2) { opacity: 0; }
+.canvas :global(.mobile-nav[open]) :global(.mobile-nav__toggle) span:last-child { transform: translateY(calc(-3.6111cqw + 1px)) rotate(-45deg); }
+.canvas :global(.mobile-nav__panel) {
+  position: absolute;
+  z-index: 28;
+  inset: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: #101010;
+  max-width: 100%;
+  min-height: auto;
+  padding: 85px 20px 24px;
+  gap: 14px;
+}
+.canvas :global(.mobile-nav__panel) > a { display: flex; flex-direction: column; font: 400 clamp(22px, 7cqw, 32px)/1.15 var(--font-menu); }
+.canvas :global(.mobile-nav__number) { font: 400 .85rem/1 var(--font-text); color: #949494; margin-bottom: .35rem; }
+.canvas :global(.mobile-nav__copyright) { border-top: 1px solid #aaa5; font-size: .85rem; color: #a3a3a3; padding-top: 1rem; }
+.canvas :global(.site-footer) {
+  min-height: 0;
+  padding: 0 5.5556cqw;
+  background: transparent;
+  isolation: auto;
+}
+.canvas :global(.site-footer)::before { display: none; }
+.canvas :global(.site-footer__top) {
+  display: grid;
+  height: auto;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(25.8333cqw, max-content);
+  align-items: start;
+  gap: 7.7cqw 10px;
+  padding-bottom: 4.1cqw;
+}
+.canvas :global(.site-footer__top) :global(.brand) {
+  width: 55.8333cqw;
+  height: 31.9444cqw;
+  grid-column: 1 / -1;
+  margin: 0;
+}
+.canvas :global(.site-footer__contacts),
+.canvas :global(.site-footer__social) {
+  min-width: 0;
+  margin: 0;
+  gap: 0;
+  font: 600 clamp(12px, 4.1025cqw, 19px)/1.41 var(--font-text);
+}
+.canvas :global(.site-footer__heading) { margin: 0 0 .22em; color: #949494; }
+.canvas :global(.site-footer__contacts) a { overflow-wrap: anywhere; }
+.canvas :global(.site-footer__bottom) {
+  padding: 2.4cqw 0 4.1cqw;
+  color: #949494;
+  border-top-color: #d8d8d8;
+  font: 400 clamp(11px, 3.3333cqw, 19px)/1.21 var(--font-text);
+}
+
+@media (min-width: $desktop) {
+  .canvas {
+    max-width: 1440px;
+    background-image: url('/figma/404/background-desktop.webp');
+  }
+  .main {
+    /* Header ends at 114px, the glyph group begins at y=334.924. */
+    padding: 15.342cqw 2.7778cqw 5.3cqw;
+  }
+  .art {
+    width: 43.1347cqw;
+    aspect-ratio: 621.14 / 266.766;
+    transform: translateX(-.1076cqw);
+  }
+  .fern { left: 6.992%; top: -63.214%; width: 94.046%; }
+  .message {
+    margin-top: 3.84cqw;
+    font-size: clamp(19px, 1.79514cqw, 25.85px);
+  }
+  .home {
+    min-width: 18.89cqw;
+    margin-top: 2.75cqw;
+    padding: .45rem 1.5rem;
+    font-size: clamp(19px, 1.79514cqw, 25.85px);
+    transform: translateX(1.5625cqw);
+  }
+  .canvas :global(.site-header) {
+    height: 7.9167cqw;
+    padding: 2.5cqw 2.7778cqw 0;
+  }
+  .canvas :global(.site-header) :global(.brand) { width: 4.375cqw; height: 2.9167cqw; }
+  .canvas :global(.site-header__right) { display: flex; margin-top: .65cqw; }
+  .canvas :global(.desktop-nav) { gap: 2.4cqw; }
+  .canvas :global(.desktop-nav) a { font-size: clamp(14px, 1.294cqw, 18.6332px); }
+  .canvas :global(.desktop-nav__primary):not(:hover) { text-decoration: none; }
+  .canvas :global(.lang-switcher--desktop),
+  .canvas :global(.mobile-nav) { display: none; }
+  .canvas :global(.site-footer) { padding-inline: 2.7778cqw; }
+  .canvas :global(.site-footer__top) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 17.4cqw) minmax(0, 22.5694cqw);
+    min-height: 20.8333cqw;
+    padding: 0;
+    column-gap: 2.4cqw;
+  }
+  .canvas :global(.site-footer__top) :global(.brand) {
+    grid-column: auto;
+    width: 18.75cqw;
+    height: 10.7639cqw;
+  }
+  .canvas :global(.site-footer__contacts),
+  .canvas :global(.site-footer__social) {
+    margin-top: 3.3333cqw;
+    font-size: clamp(14px, 1.31944cqw, 19px);
+  }
+  .canvas :global(.site-footer__bottom) {
+    padding: .5cqw 0 1.38cqw;
+    font-size: clamp(13px, 1.31944cqw, 19px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas :global(.mobile-nav__toggle) span { transition: none; }
+}
