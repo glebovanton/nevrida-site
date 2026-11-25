@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { siteIcons } from "@/lib/site-icons";
 import { NotFoundPage } from "@/components/NotFoundPage";
 import "@/app/globals.css";
 
 // A global 404 has its own document: the locale root layouts are not rendered.
 export const metadata: Metadata = {
+  icons: siteIcons,
   title: "404 — Такой старонкі няма | Nevrida",
   robots: { index: false, follow: true },
 };

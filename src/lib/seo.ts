@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { siteIcons } from "@/lib/site-icons";
 import { type Locale, languageLinks, messages, pathFor } from "@/data/i18n";
 import type { Song } from "@/data/songs";
 import { site } from "@/data/site";
@@ -10,6 +11,7 @@ export function rootMetadata(locale: Locale): Metadata {
   return {
     metadataBase: new URL(site.url),
     applicationName: "Nevrida",
+    icons: siteIcons,
     title: { default: messages[locale].seo.homeTitle, template: "%s | Nevrida" },
     description: messages[locale].seo.homeDescription,
     openGraph: { siteName: "Nevrida", locale: ogLocales[locale], type: "website", url: site.url + pathFor(locale) },
